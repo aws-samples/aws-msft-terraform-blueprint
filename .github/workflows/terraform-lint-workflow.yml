@@ -11,6 +11,9 @@ on:
 
 jobs:
   terraform-lint:
+    defaults:
+      run:
+        working-directory: ./modules
     name: Terraform Lint
     runs-on: ubuntu-latest
 
