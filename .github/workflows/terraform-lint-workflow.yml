@@ -6,6 +6,9 @@ on:
 
 jobs:
   tflint:
+    defaults:
+      run:
+        working-directory: ./modules
     runs-on: ${{ matrix.os }}
 
     strategy:
