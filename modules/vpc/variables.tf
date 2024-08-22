@@ -1,3 +1,11 @@
+## AWS Region
+variable "aws_region" {
+  type = string
+  default = "us-east-1"
+  description = "Default AWS Region to deploy VPC"
+  
+}
+
 ## VPC CIDR BLOCK
 variable "vpc_cidr_block" {
   type        = string
