@@ -4,10 +4,10 @@ name: Terraform Lint Check
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   terraform-lint:
