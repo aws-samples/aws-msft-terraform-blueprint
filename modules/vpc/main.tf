@@ -8,15 +8,15 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws_region
+  region =      var.aws_region
 }
 
 ## Data
 
 data "aws_availability_zones" "az" {
-  state = "available"
+  state =      "available"
   filter {
-    name   = "opt-in-status"
+    name   =     "opt-in-status"
     values = ["opt-in-not-required"]
   }
 }
