@@ -1,0 +1,54 @@
+name: Terraform FMT Check
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-fmt:
+    defaults:
+      run:
+        working-directory: ./modules
+    name: Terraform FMT Check
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.0
+
+       # Run Terraform FMT and capture unformatted files
+      - name: Check Terraform Formatting
+        id: terraform_fmt
+        run: |
+          terraform fmt -check -recursive > fmt_output.txt || true
+          if [ -s fmt_output.txt ]; then
+            echo "The following files need to be formatted:"
+            cat fmt_output.txt
+            exit 1
+          else
+            echo "All Terraform files are properly formatted."
+          fi
+
+
+# How This Script Works:
+
+#   1.	Check Formatting and Capture Output:
+#   •	The command terraform fmt -check -recursive checks the formatting and writes any unformatted files to fmt_output.txt.
+#   •	The || true at the end ensures the script continues even if the command fails (which it will if there are unformatted files).
+#   2.	Check for Unformatted Files:
+#   •	If fmt_output.txt is not empty (meaning there are unformatted files), the script outputs the list of unformatted files and exits with a status of 1 to fail the job.
+#   •	If fmt_output.txt is empty, the script confirms that all files are properly formatted.
+#   3.	Failing the Workflow:
+#   •	The exit 1 command ensures that the workflow fails if there are any unformatted files.
+          
