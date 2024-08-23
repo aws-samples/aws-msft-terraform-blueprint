@@ -27,21 +27,18 @@ jobs:
         with:
           terraform_version: 1.8.0
 
-      # Run Terraform FMT and check if files are formatted correctly
+       # Run Terraform FMT and capture unformatted files
       - name: Check Terraform Formatting
         id: terraform_fmt
-        run: terraform fmt -check -recursive
-        continue-on-error: true
-
-      # Output which files are not formatted correctly
-      - name: Show Unformatted Files
-        if: failure()
-        run: terraform fmt -recursive -diff
-
-      # Fail the workflow if there are unformatted files
-      - name: Fail if not formatted
-        if: failure()
-        run: exit 1
+        run: |
+          terraform fmt -check -recursive > fmt_output.txt || true
+          if [ -s fmt_output.txt ]; then
+            echo "The following files need to be formatted:"
+            cat fmt_output.txt
+            exit 1
+          else
+            echo "All Terraform files are properly formatted."
+          fi
 
 
         # How it works:
