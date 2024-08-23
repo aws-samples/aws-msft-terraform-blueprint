@@ -1,0 +1,28 @@
+name: Terraform FMT Check
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform-fmt:
+    name: Terraform FMT Check
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.0
+
+      # Run Terraform FMT and check if files are formatted correctly
+      - name: Check Terraform Formatting
+        run: terraform fmt -check -recursive
+
+      # If formatting is incorrect, the step will fail and prevent the pull request from being merged
