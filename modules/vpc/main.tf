@@ -14,7 +14,7 @@ provider "aws" {
 ## Data
 
 data "aws_availability_zones" "az" {
-  state =      "available"
+  state =              "available"
   filter {
     name   =     "opt-in-status"
     values =        ["opt-in-not-required"]
@@ -24,7 +24,7 @@ data "aws_availability_zones" "az" {
 ## VPC
 
 resource "aws_vpc" "vpc" {
-  cidr_block           = var.vpc_cidr_block
+        cidr_block           = var.vpc_cidr_block
   enable_dns_hostnames = true
   enable_dns_support   = true
   tags = {
