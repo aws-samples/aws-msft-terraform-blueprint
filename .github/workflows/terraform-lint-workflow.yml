@@ -42,3 +42,15 @@ jobs:
         run: |
           echo "Terraform linting failed. Please fix the issues before proceeding."
           exit 1
+
+
+
+# How it works:
+
+#   1.	Triggering Events: The workflow triggers on pull requests and pushes to the main branch.
+#   2.	Checkout Code: The repository’s code is checked out.
+#   3.	Set up Terraform: Terraform is installed and set up using the specified version.
+#   4.	Install tflint: The tflint tool, which lints Terraform files, is installed.
+#   5.	Run tflint: The workflow runs tflint to check the Terraform files for linting issues.
+#   6.	Fail the Workflow: If any linting issues are found, the workflow will fail the pull request or merge to the main branch by running the exit 1 command.
+          
