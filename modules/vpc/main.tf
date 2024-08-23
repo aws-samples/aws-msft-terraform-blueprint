@@ -70,7 +70,7 @@ resource "aws_subnet" "public_subnets" {
 ## Elastic IP for Nat Gateway
 
 resource "aws_eip" "eip_natgateway" {
-  domain        = "vpc"
+        domain        = "vpc"
   depends_on = [aws_internet_gateway.internet_gateway]
   tags = {
     Name = "Elastic IP for Nat Gateway"
