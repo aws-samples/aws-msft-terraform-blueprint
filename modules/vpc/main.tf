@@ -8,24 +8,24 @@ terraform {
 }
 
 provider "aws" {
-  region =              var.aws_region
+  region = var.aws_region
 }
 
 ## Data
 
 data "aws_availability_zones" "az" {
-  state =              "available"
+  state = "available"
   filter {
-    name   =     "opt-in-status"
-    values =        ["opt-in-not-required"]
+    name   = "opt-in-status"
+    values = ["opt-in-not-required"]
   }
 }
 
 ## VPC
 
 resource "aws_vpc" "vpc" {
-        cidr_block           = var.vpc_cidr_block
-          enable_dns_hostnames = true
+  cidr_block           = var.vpc_cidr_block
+  enable_dns_hostnames = true
   enable_dns_support   = true
   tags = {
     Name = "VPC"
@@ -52,7 +52,7 @@ resource "aws_subnet" "public_subnets" {
   availability_zone = each.key
 
   tags = {
-    Subnet =      "${each.key}-${each.value}"
+    Subnet = "${each.key}-${each.value}"
     Name   = "Public Subnet / ${each.key}"
     Tier   = "Public"
   }
@@ -60,7 +60,7 @@ resource "aws_subnet" "public_subnets" {
 
 ## Internet Gateway
 
-      resource "aws_internet_gateway" "internet_gateway" {
+resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.vpc.id
   tags = {
     Name = "Internet Gateway"
@@ -70,7 +70,7 @@ resource "aws_subnet" "public_subnets" {
 ## Elastic IP for Nat Gateway
 
 resource "aws_eip" "eip_natgateway" {
-        domain        = "vpc"
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.internet_gateway]
   tags = {
     Name = "Elastic IP for Nat Gateway"
