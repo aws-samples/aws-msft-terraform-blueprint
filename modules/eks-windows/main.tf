@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-1"
+  region = "us-east-1"
 }
 
 provider "kubernetes" {
@@ -102,13 +102,13 @@ output "account_id" {
 resource "aws_security_group" "cluster_sg" {
   name        = "cluster_sg"
   description = "Allow TLS inbound traffic"
-  vpc_id = data.aws_vpc.vpc_id.id
+  vpc_id      = data.aws_vpc.vpc_id.id
 }
 
 resource "aws_security_group" "windows_sg" {
   name        = "windows_sg"
   description = "Allow TLS inbound traffic"
-  vpc_id = data.aws_vpc.vpc_id.id
+  vpc_id      = data.aws_vpc.vpc_id.id
 
   egress {
     from_port   = 0
@@ -340,8 +340,8 @@ resource "aws_eks_node_group" "node_group_windows" {
   ]
 
   taint {
-    key = "windows"
-    value = "os"
+    key    = "windows"
+    value  = "os"
     effect = "NO_SCHEDULE"
   }
 
