@@ -9,6 +9,10 @@ on:
 
 jobs:
   terraform-fmt:
+    defaults:
+      run:
+        working-directory: ./modules
+        
     name: Terraform FMT Check
     runs-on: ubuntu-latest
 
