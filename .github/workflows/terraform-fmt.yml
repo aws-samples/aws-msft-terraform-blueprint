@@ -41,9 +41,14 @@ jobs:
           fi
 
 
-        # How it works:
-        #   1.	Triggering Events: The workflow triggers on both pull requests and pushes to the main branch.
-        #   2.	Checkout Code: The repository is checked out.
-        #   3.	Set up Terraform: Terraform is installed and set up.
-        #   4.	Check Formatting: The terraform fmt -check -recursive command checks for formatting issues. If issues are found, it lists the files and fails the job. The terraform fmt -diff -recursive command shows the differences and outputs the files that need formatting.
-        #   5.	Fail the Job on Pushes to Main: The workflow will fail on both pull requests and direct pushes to the main branch if formatting issues are detected, preventing the merge or push.
+# How This Script Works:
+
+#   1.	Check Formatting and Capture Output:
+#   •	The command terraform fmt -check -recursive checks the formatting and writes any unformatted files to fmt_output.txt.
+#   •	The || true at the end ensures the script continues even if the command fails (which it will if there are unformatted files).
+#   2.	Check for Unformatted Files:
+#   •	If fmt_output.txt is not empty (meaning there are unformatted files), the script outputs the list of unformatted files and exits with a status of 1 to fail the job.
+#   •	If fmt_output.txt is empty, the script confirms that all files are properly formatted.
+#   3.	Failing the Workflow:
+#   •	The exit 1 command ensures that the workflow fails if there are any unformatted files.
+          
