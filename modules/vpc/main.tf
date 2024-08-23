@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  region =      var.aws_region
+  region =              var.aws_region
 }
 
 ## Data
@@ -17,7 +17,7 @@ data "aws_availability_zones" "az" {
   state =      "available"
   filter {
     name   =     "opt-in-status"
-    values = ["opt-in-not-required"]
+    values =        ["opt-in-not-required"]
   }
 }
 
@@ -52,7 +52,7 @@ resource "aws_subnet" "public_subnets" {
   availability_zone = each.key
 
   tags = {
-    Subnet = "${each.key}-${each.value}"
+    Subnet =      "${each.key}-${each.value}"
     Name   = "Public Subnet / ${each.key}"
     Tier   = "Public"
   }
