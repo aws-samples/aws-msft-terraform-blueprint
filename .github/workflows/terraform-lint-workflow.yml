@@ -1,43 +1,44 @@
-name: Lint
+name: Terraform Lint Check
+
 on:
-  push:
-    branches: [ main]
   pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
-  tflint:
+  terraform-lint:
     defaults:
       run:
         working-directory: ./modules
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+    name: Terraform Lint Check
+    runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-      name: Checkout source code
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - uses: actions/cache@v4
-      name: Cache plugin dir
-      with:
-        path: ~/.tflint.d/plugins
-        key: ${{ matrix.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+      # Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.0
 
-    - uses: terraform-linters/setup-tflint@v4
-      name: Setup TFLint
-      with:
-        tflint_version: v0.52.0
+      # Install tflint (Terraform Linter)
+      - name: Install tflint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 
-    - name: Show version
-      run: tflint --version
+      # Run tflint to lint the Terraform files
+      - name: Run tflint
+        run: tflint
 
-    - name: Init TFLint
-      run: tflint --init
-      env:
-        # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
-        GITHUB_TOKEN: ${{ github.token }}
-
-    - name: Run TFLint
-      run: tflint -f compact
+      # Fail the workflow if tflint finds issues
+      - name: Check for lint issues
+        if: failure()
+        run: |
+          echo "Terraform linting failed. Please fix the issues before proceeding."
+          exit 1
