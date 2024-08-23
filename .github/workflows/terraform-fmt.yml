@@ -5,14 +5,14 @@ on:
     branches:
       - main
   push:
-    branches: main
+    branches:
+      - main
 
 jobs:
   terraform-fmt:
     defaults:
       run:
         working-directory: ./modules
-        
     name: Terraform FMT Check
     runs-on: ubuntu-latest
 
@@ -29,6 +29,19 @@ jobs:
 
       # Run Terraform FMT and check if files are formatted correctly
       - name: Check Terraform Formatting
-        run: terraform fmt -check -recursive
+        id: terraform_fmt
+        run: terraform fmt -check -recursive || (terraform fmt -recursive && echo "The following files are not formatted:" && terraform fmt -diff -recursive && exit 1)
 
-      # If formatting is incorrect, the step will fail and prevent the pull request from being merged
+      # Output which files are not formatted correctly
+      - name: Show Unformatted Files
+        if: failure()  # Only run if the previous step fails
+        run: terraform fmt -diff -recursive
+
+
+
+        # How it works:
+        #   1.	Triggering Events: The workflow triggers on both pull requests and pushes to the main branch.
+        #   2.	Checkout Code: The repository is checked out.
+        #   3.	Set up Terraform: Terraform is installed and set up.
+        #   4.	Check Formatting: The terraform fmt -check -recursive command checks for formatting issues. If issues are found, it lists the files and fails the job. The terraform fmt -diff -recursive command shows the differences and outputs the files that need formatting.
+        #   5.	Fail the Job on Pushes to Main: The workflow will fail on both pull requests and direct pushes to the main branch if formatting issues are detected, preventing the merge or push.
