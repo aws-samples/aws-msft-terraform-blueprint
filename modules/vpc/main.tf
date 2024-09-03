@@ -8,7 +8,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 ## Data
@@ -70,7 +70,7 @@ resource "aws_internet_gateway" "internet_gateway" {
 ## Elastic IP for Nat Gateway
 
 resource "aws_eip" "eip_natgateway" {
-  domain        = "vpc"
+  domain     = "vpc"
   depends_on = [aws_internet_gateway.internet_gateway]
   tags = {
     Name = "Elastic IP for Nat Gateway"

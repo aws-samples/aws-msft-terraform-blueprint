@@ -1,0 +1,56 @@
+name: Terraform Lint Check
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform-lint:
+    defaults:
+      run:
+        working-directory: ./modules
+    name: Terraform Lint Check
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.0
+
+      # Install tflint (Terraform Linter)
+      - name: Install tflint
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+
+      # Run tflint to lint the Terraform files
+      - name: Run tflint
+        run: tflint
+
+      # Fail the workflow if tflint finds issues
+      - name: Check for lint issues
+        if: failure()
+        run: |
+          echo "Terraform linting failed. Please fix the issues before proceeding."
+          exit 1
+
+
+
+# How it works:
+
+#   1.	Triggering Events: The workflow triggers on pull requests and pushes to the main branch.
+#   2.	Checkout Code: The repository’s code is checked out.
+#   3.	Set up Terraform: Terraform is installed and set up using the specified version.
+#   4.	Install tflint: The tflint tool, which lints Terraform files, is installed.
+#   5.	Run tflint: The workflow runs tflint to check the Terraform files for linting issues.
+#   6.	Fail the Workflow: If any linting issues are found, the workflow will fail the pull request or merge to the main branch by running the exit 1 command.
+          
