@@ -194,7 +194,7 @@ resource "aws_db_instance" "rdsmssql01" {
   max_allocated_storage                 = 50
   storage_encrypted                     = true
   apply_immediately                     = true
-  identifier                            = format("%s%s", var.CustomerCode, "mssql01")
+  identifier                            = "pdomssql01"
   username                              = "admin"
   password                              = jsondecode(data.aws_secretsmanager_secret_version.rdsmssql01.secret_string)["password"]
   port                                  = 1433

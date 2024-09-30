@@ -19,7 +19,7 @@ resource "aws_s3_bucket_public_access_block" "websrv" {
   restrict_public_buckets = true
 }
 
-resource "aws_s3_bucket_object" "websrv" {
+resource "aws_s3_object" "websrv" {
   for_each = fileset("./existing_webserverfiles/", "**")
   bucket   = aws_s3_bucket.websrv.id
   key      = "webserverfiles/${each.value}"

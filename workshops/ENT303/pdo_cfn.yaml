@@ -243,7 +243,7 @@ Resources:
       AutoMinorVersionUpgrade: true
       BackupRetentionPeriod: 1
       DBInstanceClass: db.t3.xlarge
-      DBInstanceIdentifier: !Sub ${CustomerCode}mssql01
+      DBInstanceIdentifier: "pdomssql01"
       DBSubnetGroupName: !Ref sbgpdrdsmssql01
       DeleteAutomatedBackups: true
       DeletionProtection: false
